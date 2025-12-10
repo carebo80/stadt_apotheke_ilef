@@ -1,10 +1,42 @@
-/node_modules
-/dist
-/vendor
+# 🌐 Allgemeine Ignorierregeln (Node, Composer, Logs, Env)
+node_modules/
+dist/
+vendor/
+.vite/
 .env
 *.log
-/.fleet
-/.idea
-/.nova
-/.vscode
-/.zed
+
+# 🛠️ IDE- & Tool-Verzeichnisse
+.fleet/
+.idea/
+.nova/
+.vscode/
+.zed/
+
+# 🔐 SSH-Schlüssel (niemals committen!)
+.ssh/
+*.pem
+*.ppk
+id_rsa*
+id_ed25519*
+
+# 💻 Lokale Systemdateien
+.DS_Store
+Thumbs.db
+
+# ⚙️ WordPress Core-Dateien (nicht versionieren!)
+/wp-admin/
+/wp-includes/
+readme.html
+license.txt
+xmlrpc.php
+
+# 🔑 Konfigurationsdateien mit Zugangsdaten
+wp-config.php
+
+# 🗂️ Uploads, Caches, lokale Datenbanken
+*.sql
+*.sqlite
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/cache/

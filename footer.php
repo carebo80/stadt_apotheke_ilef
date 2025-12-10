@@ -1,27 +1,41 @@
-<?php
-/**
- * Theme footer template.
- *
- * @package TailPress
- */
-?>
-        </main>
+<?php if (!defined('ABSPATH')) exit; ?>
 
-        <?php do_action('tailpress_content_end'); ?>
-    </div>
+<footer id="site-footer" class="section-band footer-band footer--sep">
+    <div class="container mx-auto px-4">
+        <div class="grid gap-8 md:grid-cols-3">
+            <?php for ($i = 1; $i <= 3; $i++): ?>
+                <div class="ft-col"><?php dynamic_sidebar("footer-$i"); ?></div>
+            <?php endfor; ?>
+        </div>
 
-    <?php do_action('tailpress_content_after'); ?>
+        <div class="ft-bottom mt-10 pt-6 border-t">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-center">
+                <?php if (has_nav_menu('secondary')): ?>
+                    <nav aria-label="<?php esc_attr_e('Footernavigation', 'stadt_apotheke_ilef'); ?>"
+                        class="ft-nav order-2 md:order-1">
+                        <?php wp_nav_menu([
+                            'theme_location' => 'secondary',
+                            'container'      => false,
+                            'menu_class'     => 'flex flex-wrap items-center gap-x-4 gap-y-2',
+                            'depth'          => 1,
+                            'fallback_cb'    => false,
+                        ]); ?>
+                    </nav>
+                <?php endif; ?>
 
-    <footer id="colophon" class="bg-light/50 mt-12" role="contentinfo">
-        <div class="container mx-auto py-12">
-            <?php do_action('tailpress_footer'); ?>
-            <div class="text-sm text-zinc-700">
-                &copy; <?php echo esc_html(date_i18n('Y')); ?> - <?php bloginfo('name'); ?>
+                <p class="ft-copy text-sm w-full text-center order-1 md:order-2">
+                    <?php if (is_active_sidebar('footer-bottom')) : ?>
+                        <?php dynamic_sidebar('footer-bottom'); ?>
+                    <?php else : ?>
+                        © <?php echo date('Y'); ?> Stadt Apotheke Illnau-Effretikon
+                    <?php endif; ?>
+                </p>
             </div>
         </div>
-    </footer>
-</div>
+    </div>
+</footer>
 
 <?php wp_footer(); ?>
 </body>
+
 </html>

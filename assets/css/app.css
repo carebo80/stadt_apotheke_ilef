@@ -1,0 +1,2046 @@
+/* app.css */
+@import "tailwindcss";
+
+/* ---------- Design Tokens ---------- */
+:root {
+  --c-primary: 0 177 64;     /* grün (RGB triple) */
+  --c-surface: 255 255 255;
+  --c-on-surface: 10 10 10;
+  --c-on-primary: 255 255 255;
+
+  /* BORDER = RGB (für rgb(var(--c-border))) */
+  --c-border: 228 228 231;   /* ≈ zinc-200 */
+
+  /* RING = HSL (für hsl(var(--c-ring))) */
+  --c-ring: 220 9% 46%;
+}
+html.dark {
+  --c-surface: 9 10 12;
+  --c-on-surface: 244 244 245;
+  --c-primary: 21 115 95;
+  --c-on-primary: 255 255 255;
+
+  --c-border: 63 63 70;      /* ≈ zinc-700 */
+  --c-ring: 220 9% 60%;
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  body { background-color: rgb(var(--c-surface)); color: rgb(var(--c-on-surface)); }
+
+  /* WebKit clear-X */
+  input[type="search"]::-webkit-search-decoration,
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-results-button,
+  input[type="search"]::-webkit-search-results-decoration { display:none; }
+
+  /* Autofill */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px rgb(var(--c-surface)) inset !important;
+    -webkit-text-fill-color: rgb(var(--c-on-surface)) !important;
+  }
+}
+
+/* ---------- Components ---------- */
+@layer components {
+  
+    /* === Blog Cards: keine Unterstreichungen === */
+  .blog-card a,
+  .blog-card a:hover,
+  .blog-card a:focus {
+    text-decoration: none !important;
+  }
+
+  .blog-card h2 a {
+    color: rgb(var(--c-on-surface));
+    font-weight: 700;
+  }
+  .blog-card h2 a:hover {
+    color: rgb(var(--c-primary));
+  }
+
+  /* Vorschau-Text */
+  .blog-card p {
+    color: rgb(var(--c-on-surface) / 0.8);
+    text-decoration: none !important;
+  }
+
+  /* Buttons */
+  .btn { @apply inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium transition; }
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium transition focus:outline-none focus:ring-2;
+    background-color: rgb(var(--c-primary) / 1);
+    color: rgb(var(--c-on-primary) / 1);
+    --tw-ring-color: rgb(var(--c-primary) / .3);
+  }
+  .btn-primary:hover { opacity: .9; }
+  .btn-ghost { @apply inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium transition; background-color: transparent; }
+  .btn-ghost:hover { @apply hover:bg-black/5 dark:hover:bg-white/5; }
+
+  /* Header Icons */
+  .icon-btn { @apply inline-flex h-9 w-9 items-center justify-center rounded-full text-white/90 hover:bg-white/10 dark:text-white/90; }
+  .icon-btn svg { display:block; }
+  .icon-btn--accent { box-shadow: 0 0 0 2px rgb(var(--c-primary) / .20); }
+  .icon-btn--accent:hover { box-shadow: 0 0 0 2px rgb(var(--c-primary) / .35); }
+
+  /* Logo */
+  .logo-box { @apply flex items-center; }
+  .custom-logo, .site-logo img { height:auto; width:auto; max-height:3rem; max-width:3rem; }
+
+  /* Suche (BEM) */
+  .sa-search { @apply relative w-full; }
+  .sa-search--desktop, .sa-search--mobile { @apply w-full; }
+
+  /* Feld – kompakt, Pill */
+  .sa-search .search-field {
+    @apply w-full h-9 lg:h-10 pr-9 lg:pr-10 rounded-full px-3 text-sm outline-none
+           placeholder:text-zinc-400 dark:text-white;
+    border: 1px solid rgb(var(--c-border));
+    background-color: rgb(var(--c-surface));
+    color: rgb(var(--c-on-surface));
+    box-shadow: none;
+  }
+  /* Fokus: immer grün, dezent */
+  .sa-search .search-field:focus,
+  .sa-search .search-field:focus-visible {
+    outline: none !important;
+    border-color: rgb(var(--c-primary)) !important;
+    box-shadow: 0 0 0 2px rgb(var(--c-primary) / .22) !important;
+    --tw-ring-color: rgb(var(--c-primary) / .22) !important; /* falls irgendwo ring-* auftaucht */
+    --tw-ring-shadow: 0 0 #0000 !important;
+  }
+
+  /* Button/Icon – zentriert */
+  .sa-search .search-submit {
+    @apply absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center
+           h-6 w-6 lg:h-7 lg:w-7 rounded-full hover:bg-zinc-100/60 dark:hover:bg-zinc-700/60;
+    background: transparent;
+    border: 0;
+    box-shadow: 0 0 0 2px rgb(var(--c-primary) / .20);
+  }
+  .sa-search .search-submit svg { display:block; width:16px; height:16px; }
+
+  /* FAQ – Woo-Button-Defaults neutralisieren */
+  .tp-faq button[data-toggle]{ background:transparent !important; color:inherit; border:0; box-shadow:none; }
+  .tp-faq button[data-toggle]:focus{ outline:2px solid var(--tw-ring-color, transparent); outline-offset:2px; }
+/* kleine Pill-Links */
+.sa-chip {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .35rem .65rem;
+  border-radius: 9999px;
+  background: rgb(var(--c-surface));
+  color: rgb(var(--c-on-surface));
+  border: 1px solid rgb(var(--c-on-surface) / .12);
+  text-decoration: none;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.sa-chip:hover{
+  background: rgb(var(--c-primary)); color: rgb(var(--c-on-primary));
+  border-color: rgb(var(--c-primary));
+  box-shadow: 0 6px 14px rgba(0,0,0,.08);
+}
+
+}
+
+/* ---------- Utilities ---------- */
+@layer utilities {
+  #primary-navigation-mobile .sub-menu { @apply hidden; }
+}
+
+/* ---------- Final & Safety ---------- */
+/* Forms-Plugin (opt-in) ist in tailwind.config.cjs gesetzt. Falls doch globale Ringe ankommen, hilft das: */
+:root { --tw-ring-color: rgb(var(--c-primary) / .30); }
+/* === Header-Suche: final override === */
+#site-header { z-index: 50; }
+#site-header a, #site-header * { pointer-events:auto; }
+
+/* Content sicher unter dem Header starten (Header-Höhe anpassen, z.B. 72px) */
+:root{ --header-h: 3px; }
+#site-header.is-sticky{ position: sticky; top: 0; }
+main, .site-content { padding-top: calc(var(--header-h) + 8px); }
+
+/* Falls Anker-Sprünge den Header überdecken */
+:target { scroll-margin-top: calc(var(--header-h) + 12px); }
+
+#site-header .sa-search .search-field {
+  outline: none !important;
+  box-shadow: none !important;
+  --tw-ring-color: rgb(var(--c-primary) / .22) !important;
+}
+#site-header .sa-search .search-field:focus,
+#site-header .sa-search .search-field:focus-visible{
+  outline: none !important;
+  border-color: rgb(var(--c-primary)) !important;
+  box-shadow: 0 0 0 2px rgb(var(--c-primary) / .22) !important;
+}
+/* falls der Button selbst einen fremden Ring bekommt */
+#site-header .sa-search .search-submit{
+  box-shadow: 0 0 0 2px rgb(var(--c-primary) / .20) !important;
+}
+/* Tabs/Icons sauber & ohne Underline */
+#site-header .sa-tabs a { text-decoration: none }
+#site-header .sa-tabs svg { display:block; overflow:visible }
+
+/* Submenu bereits dunkel/hell über deine Klassen; hier nur optionaler Akzent-Rand */
+#site-header .sub-menu { 
+  backdrop-filter: saturate(1.1);
+}
+
+/* (optional) Scrollbare Tabs, wenn zu lang – ohne sichtbare Scrollbar */
+#site-header .sa-tabs {
+  scrollbar-width: none;
+}
+#site-header .sa-tabs::-webkit-scrollbar { display: none; }
+.text-current{ color: currentColor; }
+/* Submenu-Grundlage */
+#primary-navigation .menu-item-has-children { position: relative; }
+#primary-navigation .menu-item-has-children > .sub-menu { display: none; }
+
+/* Öffnen auf Desktop (Hover) + Tastatur (Focus) */
+#primary-navigation .menu-item-has-children:hover > .sub-menu,
+#primary-navigation .menu-item-has-children:focus-within > .sub-menu {
+  display: block;
+}
+
+/* Öffnen auf Touch via data-open (siehe JS) */
+#primary-navigation .menu-item-has-children[data-open="true"] > .sub-menu {
+  display: block;
+}
+
+/* Z-Index, damit nichts abgeschnitten wird */
+#primary-navigation .sub-menu { z-index: 80 !important; }
+/* Basis: Dropdowns zu */
+#primary-navigation .menu-item-has-children { position: relative; }
+#primary-navigation .menu-item-has-children > .sub-menu {
+  display: none;
+  /* Sicherheits-Layout, falls die Klassen mal fehlen */
+  position: absolute; left: 0; top: calc(100% + .5rem);
+}
+
+/* Desktop: Hover + Tastatur */
+@media (hover:hover) {
+  #primary-navigation .menu-item-has-children:hover > .sub-menu,
+  #primary-navigation .menu-item-has-children:focus-within > .sub-menu {
+    display: block !important;
+  }
+}
+
+/* Touch / explizit öffnen (siehe JS) */
+#primary-navigation .menu-item-has-children[data-open="true"] > .sub-menu {
+  display: block !important;
+}
+/* Icongröße im Button */
+#primary-menu-toggle svg { width: 20px; height: 20px; }
+
+/* per aria-expanded zwischen Burger und X umschalten */
+#primary-menu-toggle[aria-expanded="false"] .ico-open { display: inline-flex; }
+#primary-menu-toggle[aria-expanded="false"] .ico-close { display: none; }
+#primary-menu-toggle[aria-expanded="true"]  .ico-open { display: none; }
+#primary-menu-toggle[aria-expanded="true"]  .ico-close { display: inline-flex; }
+.hero-overlay{ /* selbe Klasse wie dein Overlay */
+  background: linear-gradient(90deg,
+    rgb(var(--c-primary) / .85) 0%,
+    rgb(var(--c-primary) / .15) 100%);
+}
+@supports (color-mix(in oklab, black 0%, white 0%)){
+  .hero-overlay{
+    background: linear-gradient(90deg,
+      color-mix(in oklab, rgb(var(--c-primary)) 85%, transparent) 0%,
+      color-mix(in oklab, rgb(var(--c-primary)) 15%, transparent) 100%);
+  }
+}
+/* Overlay nutzt Primärfarbe + variable Deckkraft */
+.hero__overlay{
+  background: linear-gradient(90deg,
+    rgb(var(--c-primary) / var(--hero-a)) 0%,
+    rgb(var(--c-primary) / 0) 100%);
+}
+
+/* dezente Textschatten für helle Schrift auf Bild */
+.hero.text-white .hero-copy {
+  text-shadow: 0 2px 10px rgba(0,0,0,.35);
+}
+/* bei dunkler Schrift keinen Schatten */
+.hero.text-zinc-900 .hero-copy { text-shadow: none; }
+/* Partner: Logos wirken neutral, werden beim Hover farbig */
+#partners .partner-logo{
+  filter: grayscale(100%) contrast(1.05);
+  opacity:.9;
+  transition: filter .2s ease, opacity .2s ease, transform .2s ease;
+}
+#partners .partner-logo:hover{
+  filter:none;
+  opacity:1;
+  transform: translateY(-1px) scale(1.02);
+}
+/* Partner-Grid: gleich große Bühnen */
+#partners .logo-cell{
+  height: clamp(3.75rem, 5.5vw, 4.75rem);          /* ~60–76px */
+  width:  clamp(10rem, 16vw, 14rem);               /* ~160–224px */
+  display:flex; align-items:center; justify-content:center;
+  padding:.5rem 1rem;
+  border-radius: 1rem;
+  background: rgba(255,255,255,.85);
+  border: 1px solid rgb(var(--c-border));
+  box-shadow: 0 1px 2px rgba(0,0,0,.04) inset;
+}
+html.dark #partners .logo-cell{
+  background: rgba(255,255,255,.05);
+  border-color: rgb(63 63 70); /* ≈ zinc-700 */
+}
+
+/* Logo selbst: in die Bühne einpassen */
+#partners .partner-logo{
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  image-rendering: auto;
+  filter: grayscale(100%) contrast(1.05);
+  opacity: .9;
+  transition: filter .2s, opacity .2s, transform .2s;
+}
+#partners .partner-logo:hover{
+  filter: none;
+  opacity: 1;
+  transform: translateY(-1px) scale(1.02);
+}
+
+/* === Einheitliche Content-Bänder ========================================== */
+.section-band{
+  padding: 3rem 0;                          /* py-12 */
+  background: rgb(var(--c-surface));
+  color: rgb(var(--c-on-surface));
+}
+/* Einheitliche Trenner für Content-Bänder */
+main > .section-band:not(:first-of-type) {
+  border-top: 1px solid rgb(var(--c-on-surface) / .08);
+}
+html.dark main > .section-band:not(:first-of-type) {
+  border-top-color: rgb(var(--c-on-surface) / .16);
+}
+
+/* Überschriften in den Bändern – immer volle Lesbarkeit */
+.section-title{
+  margin-bottom: 2.5rem;                    /* mb-10 */
+  text-align: center;
+  font-weight: 800;
+  font-size: clamp(1.75rem, 1.2rem + 1.2vw, 2.25rem);
+  color: rgb(var(--c-on-surface)) !important;  /* fix gegen weiße Schrift auf weiß */
+}
+
+/* Logo-Chips (Partner/Payments) – gleiche Optik in hell/dunkel */
+.logo-chip{
+  height: 3.75rem;                          /* ~ h-15 */
+  width: 11rem;                             /* ~ w-44 */
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 9999px;
+  background: #fff;
+  border: 1px solid rgb(var(--c-on-surface) / .08);
+  box-shadow: 0 8px 20px rgba(0,0,0,.06);
+}
+html.dark .logo-chip{
+  background: rgb(24 24 27);
+  border-color: rgb(63 63 70);
+  box-shadow: 0 10px 24px rgba(0,0,0,.28);
+}
+
+.logo-chip img{
+  max-height: 2rem;                         /* konsistente Höhe */
+  width: auto;
+  object-fit: contain;
+}
+
+/* Optional: Logos dezent grau, bei Hover vollfarbig */
+.logos.is-grayscale img{ filter: saturate(0) contrast(.9); opacity:.9; }
+.logos.is-grayscale img:hover{ filter:none; opacity:1; }
+/* === Footer ============================================================ */
+#site-footer.footer-band{
+  /* nutzt deine Tokens wie die Section-Bänder */
+  background: rgb(var(--c-surface));
+  color: rgb(var(--c-on-surface));
+}
+#site-footer .ft-bottom{ border-color: rgb(var(--c-on-surface) / .10); }
+
+#site-footer .widgettitle,
+#site-footer .footer-title,
+#site-footer .ft-col > h3{
+  font-weight: 700;
+  font-size: .95rem;
+  letter-spacing: .01em;
+  margin-bottom: .75rem;
+  color: rgb(var(--c-on-surface));
+}
+
+/* Links neutral, ohne Unterstreichung – Hover in Primär */
+#site-footer a{ color: inherit; text-decoration: none; }
+#site-footer a:hover{ color: rgb(var(--c-primary)); text-decoration: none; }
+
+/* Listendarstellung in Widgets hübsch */
+#site-footer .menu, 
+#site-footer ul{ margin: 0; padding: 0; list-style: none; }
+#site-footer li + li{ margin-top: .35rem; }
+
+/* Footernav (untere Zeile) */
+#site-footer .ft-nav a{
+  font-size: .925rem;
+  opacity: .9;
+}
+#site-footer .ft-nav a:hover{ opacity: 1; }
+
+/* Einheitlicher Trenner oberhalb des Footers */
+.section-band + footer,
+footer.footer--sep {
+  border-top: 1px solid rgb(var(--c-on-surface) / .08);
+}
+
+/* Footer: Typografie sauber setzen */
+footer .footer-widget :is(h2,h3,.footer-title,.wp-block-heading){
+  font-weight: 700;
+  font-size: 1.125rem;           /* ≈ text-lg */
+  line-height: 1.5;
+  margin: 0 0 .75rem 0;          /* mb-3 */
+  color: rgb(var(--c-on-surface));
+}
+@media (min-width:768px){
+  footer .footer-widget :is(h2,h3,.footer-title,.wp-block-heading){
+    font-size: 1.25rem;          /* auf md etwas größer */
+  }
+}
+/* Listen im Footer: bullets weg + kompakter Abstand */
+footer .footer-widget ul,
+footer .footer-widget .wp-block-list{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+footer .footer-widget li + li{ margin-top: .375rem; } /* space-y-1.5 */
+
+/* Links: dezente Farbe + schöner Hover in Primärfarbe */
+footer .footer-widget a{
+  color: rgb(var(--c-on-surface) / .75);
+  text-decoration: none;
+}
+footer .footer-widget a:hover{
+  color: rgb(var(--c-primary));
+}
+
+/* Darkmode-Anpassungen */
+html.dark footer .footer-widget a{
+  color: rgb(244 244 245 / .78);
+}
+/* Bänder: Abstand + Trennlinie zwischen den Sektionen */
+.section-band{ padding-block:3rem; background:rgb(var(--c-surface)); color:rgb(var(--c-on-surface)); }
+.section-band + .section-band{ border-top:1px solid rgb(var(--c-on-surface) / .08); }
+
+/* Stacking-Kontext – verhindert, dass Shadows “über” die Trennlinie ragen */
+.section-band{ position:relative; isolation:isolate; }
+
+/* Logos-Grid: sichere Gaps und Spalten */
+.logos-grid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));   /* mobil 2 */
+  gap: 1.5rem 1.5rem;                                 /* gap-y/x-6 */
+  place-items:center;
+}
+@media (min-width: 640px){ .logos-grid{ grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media (min-width:1080px){ .logos-grid{ grid-template-columns: repeat(6, minmax(0,1fr)); } }
+
+/* Chips: feste Mindestgröße – verhindert Überlappungen bei sehr langen Logos */
+.logo-chip{
+  min-width: 10rem;    /* ≈ w-40/44 */
+  min-height: 3.5rem;  /* ≈ h-14/15 */
+  display:flex; align-items:center; justify-content:center;
+  border-radius:9999px;
+  background:#fff;
+  border:1px solid rgb(var(--c-on-surface) / .08);
+  box-shadow:0 8px 20px rgba(0,0,0,.06);
+  position:relative; z-index:0;   /* sicherer Layer */
+}
+html.dark .logo-chip{
+  background: rgb(24 24 27);
+  border-color: rgb(63 63 70);
+  box-shadow: 0 10px 24px rgba(0,0,0,.28);
+}
+
+/* Bild im Chip */
+.logo-chip img{ max-height:2rem; width:auto; object-fit:contain; }
+/* === Sanfter iPad-Fix: Mobile-Header bis 1080px beibehalten === */
+
+/* Desktop-Navi erst ab 1080px zeigen */
+@media (min-width:1080px) {
+  #primary-navigation { display: block !important; }
+  #primary-navigation-mobile { display: none !important; }
+  #primary-menu-toggle { display: none !important; }     /* Burger aus */
+  #site-header .bar2-wrapper { display: block !important; } /* 2. Zeile an */
+}
+
+/* Darunter (<=1079.98px): Mobile-Header fix */
+@media (max-width:1079.98px) {
+  #primary-navigation { display: none !important; }
+  #primary-navigation-mobile { display: block !important; }
+  #primary-menu-toggle { display: inline-flex !important; } /* Burger an */
+  #site-header .bar2-wrapper { display: none !important; }  /* 2. Zeile aus */
+}
+
+/* Suche auf Desktop stabilisieren (kein Sprung bei Breakpoint) */
+#site-header .sa-search--desktop { 
+  width: clamp(18rem, 40vw, 34rem) !important; /* wächst weich, keine harte Stufe */
+}
+/* Übergänge bei Header-Höhe minimieren (weniger “Zucken”) */
+#site-header [data-topbar],
+#site-header [data-bar2] {
+  transition: max-height .15s ease, opacity .15s ease, padding .15s ease;
+}
+
+/* iOS: weniger Motion bei Safari-UI-Blendverhalten */
+@media (prefers-reduced-motion: reduce) {
+  #site-header * { transition: none !important; }
+}
+/* ===== Navigation: Pills (weißer Fill, Primary-Verlauf als Rand) ===== */
+#site-header { --pill-angle: to bottom; } /* Verlauf: oben links -> unten rechts */
+
+.navstyle-pills #site-header .sa-tabs>li>a{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem .9rem;
+  border-radius: .75rem;                  /* “schärfer rounded” */
+  border: 2px solid transparent;          /* echte Randdicke */
+  /* 1) Füllung (weiß)  2) Rand (Verlauf) */
+  background:
+    linear-gradient(0deg, rgb(var(--c-surface)), rgb(var(--c-surface))) padding-box,
+    linear-gradient(var(--pill-angle), #fff 0%, rgb(var(--c-primary)) 100%) border-box;
+  color: rgb(var(--c-on-surface));
+  text-decoration: none;
+  transition:
+    background-color .18s ease,
+    color .18s ease,
+    box-shadow .18s ease,
+    transform .12s ease;
+}
+
+/* keine Unterstrich-Pseudolinien bei Pills */
+.navstyle-pills #site-header .sa-tabs>li>a::after { content: none !important; }
+
+/* Hover/Focus: Fill wird Primary, Text/Icon werden weiß */
+.navstyle-pills #site-header .sa-tabs>li>a:hover,
+.navstyle-pills #site-header .sa-tabs>li>a:focus-visible{
+  background:
+    linear-gradient(0deg, rgb(var(--c-primary)), rgb(var(--c-primary))) padding-box,
+    linear-gradient(var(--pill-angle), #fff 0%, rgb(var(--c-primary)) 100%) border-box;
+  color: rgb(var(--c-on-primary));
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.06);
+  outline: none;
+}
+
+/* Active/Page: wie Hover, ohne „Lift“ */
+.navstyle-pills #site-header .sa-tabs>li>a[aria-current="page"]{
+  background:
+    linear-gradient(0deg, rgb(var(--c-primary)), rgb(var(--c-primary))) padding-box,
+    linear-gradient(var(--pill-angle), #fff 0%, rgb(var(--c-primary)) 100%) border-box;
+  color: rgb(var(--c-on-primary)) !important;
+  transform: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,.06), 0 1px 4px rgba(0,0,0,.05);
+}
+
+/* Dark Mode: Start-Fill leicht aufgehellt, Rand bleibt gleich */
+html.dark .navstyle-pills #site-header .sa-tabs>li>a{
+  background:
+    linear-gradient(0deg, rgba(255,255,255,.95), rgba(255,255,255,.95)) padding-box,
+    linear-gradient(var(--pill-angle), #fff 0%, rgb(var(--c-primary)) 100%) border-box;
+  color: rgb(var(--c-on-surface));
+}
+html.dark .navstyle-pills #site-header .sa-tabs>li>a:hover,
+html.dark .navstyle-pills #site-header .sa-tabs>li>a:focus-visible,
+html.dark .navstyle-pills #site-header .sa-tabs>li>a[aria-current="page"]{
+  /* gleicher „grüner Fill“ wie im hellen Theme */
+  background:
+    linear-gradient(0deg, rgb(var(--c-primary)), rgb(var(--c-primary))) padding-box,
+    linear-gradient(var(--pill-angle), #fff 0%, rgb(var(--c-primary)) 100%) border-box;
+  color: rgb(var(--c-on-primary)) !important;
+}
+
+/* Icons folgen Textfarbe */
+#site-header .sa-tabs a .sa-ico { color: currentColor; }
+#site-header .sa-tabs a .sa-ico > svg { display:block; }
+
+
+/* Feintuning für optische Mitte */
+#site-header{ --ico-nudge:-0.06em; } /* bei Bedarf -0.04…-0.10 testen */
+
+/* Einheitliche Icon-Kachel */
+#site-header nav .menu a>.sa-ico{
+  display:inline-grid !important;
+  place-items:center !important;
+  width:1.125rem; height:1.125rem; /* ~18px */
+  line-height:1 !important;
+  flex:0 0 auto;
+  transform: translateY(var(--ico-nudge)) !important;
+}
+#site-header nav .menu a>.sa-ico>svg{
+  display:block !important;
+  width:100% !important; height:100% !important;
+}
+
+/* Darkmode: Start-BG leicht abdunkeln, Border bleibt Primär (optional) */
+html.dark .navstyle-pills #site-header .sa-tabs>li>a{
+  background: rgba(255,255,255,.95); /* bewusst “weißlich”, weil gewünscht */
+  color: rgb(var(--c-on-surface));
+}
+
+/* Icons folgen der Textfarbe (currentColor) – Sicherheitsnetz */
+#site-header .sa-tabs a .sa-ico { color: currentColor; }
+#site-header .sa-tabs a .sa-ico > svg { display:block; }
+
+
+/* Kompakt-Option (wirkt für beide Stile) */
+.nav-compact #primary-navigation .sa-tabs{ gap:.5rem; }
+.nav-compact #primary-navigation .sa-tabs>li>a{ padding:.375rem .5rem; }
+        /* ========= Ring-Schalter (default: AUS) ========= */
+        #site-header {
+            --icon-ring-w: 0px;
+            /* 0px = kein Ring */
+            --icon-ring-color: rgb(var(--c-primary) / .22);
+        }
+
+        /* Heller Modus */
+        #site-header {
+            background-color: rgba(var(--c-surface), .95) !important;
+        }
+
+        @supports (backdrop-filter: blur(6px)) {
+            #site-header {
+                background-color: rgba(var(--c-surface), .78) !important;
+                backdrop-filter: blur(8px);
+            }
+        }
+
+        /* Dunkler Modus (nutzt deine dark-Variante von --c-surface) */
+        html.dark #site-header {
+            background-color: rgba(var(--c-surface), .86) !important;
+        }
+
+        /* Rings global EIN schalten: <header id="site-header" class="… ui-rings"> */
+        #site-header.ui-rings {
+            --icon-ring-w: 2px;
+        }
+
+        /* ===== Suche: Feld ===== */
+        #site-header .sa-search .search-field {
+            border-color: rgb(var(--c-border)) !important;
+            background-color: rgb(var(--c-surface)) !important;
+            color: rgb(var(--c-on-surface)) !important;
+            outline: none !important;
+            box-shadow: none !important;
+            --tw-ring-color: rgb(var(--c-primary) / .22) !important;
+            --tw-ring-shadow: 0 0 #0000 !important;
+            caret-color: rgb(var(--c-primary)) !important;
+        }
+
+        #site-header .sa-search .search-field:focus,
+        #site-header .sa-search .search-field:focus-visible {
+            border-color: rgb(var(--c-primary)) !important;
+            box-shadow: 0 0 0 2px rgb(var(--c-primary) / .22) !important;
+            outline: none !important;
+        }
+
+        /* ===== Suche: Icon-Button IM Feld – Ring folgt Schalter ===== */
+        #site-header .sa-search .search-submit {
+            background: transparent !important;
+            border: 0 !important;
+            outline: none !important;
+            box-shadow: 0 0 0 var(--icon-ring-w) var(--icon-ring-color) !important;
+        }
+
+        #site-header .sa-search .search-suggestions,
+        #site-header .sa-search .autocomplete-suggestions,
+        #site-header .sa-search .awesomplete ul {
+            position: absolute;
+            z-index: 60;
+            /* gleich hoch wie Submenüs */
+        }
+
+        /* Baseline: runde Icon-Buttons */
+        #site-header .icon-btn,
+        #site-header #themeSwitchBtn {
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            height: 2.5rem;
+            width: 2.5rem;
+            background: transparent;
+            color: inherit;
+        }
+
+        /* Tabs: Verlaufs-Unterlinie aus der Primärfarbe */
+        #site-header .sa-tabs a {
+            position: relative;
+            text-decoration: none;
+        }
+
+        /* Dropdown: KEIN Border/Unterstrich – nur Text/Icon färben */
+        #primary-navigation .sub-menu a {
+            border: 0 !important;
+            border-bottom-width: 0 !important;
+        }
+
+        /* vorhandene Border im Active-Zustand ausblenden */
+        .navstyle-tabs #site-header .sa-tabs a[aria-current="page"] {
+            border-bottom-color: transparent !important;
+        }
+
+        /* Hover: dezente Linie */
+        .navstyle-tabs #site-header .sa-tabs a:hover::after {
+            background-color: rgb(var(--c-primary));
+            opacity: .6;
+        }
+
+        /* Gefüllter Stil, wenn im Header .ui-filled gesetzt ist */
+        #site-header.ui-filled .icon-btn,
+        #site-header.ui-filled #themeSwitchBtn {
+            background: rgba(255, 255, 255, .10);
+            backdrop-filter: blur(2px);
+        }
+
+        .dark #site-header.ui-filled .icon-btn,
+        .dark #site-header.ui-filled #themeSwitchBtn {
+            background: rgba(255, 255, 255, .08);
+        }
+
+        #site-header.ui-filled .icon-btn:hover,
+        #site-header.ui-filled #themeSwitchBtn:hover {
+            background: rgba(0, 0, 0, .06);
+        }
+
+        .dark #site-header.ui-filled .icon-btn:hover,
+        .dark #site-header.ui-filled #themeSwitchBtn:hover {
+            background: rgba(255, 255, 255, .12);
+        }
+
+        #site-header .sa-search .search-submit:hover {
+            background: rgba(0, 0, 0, .06);
+        }
+
+        .dark #site-header .sa-search .search-submit:hover {
+            background: rgba(255, 255, 255, .08);
+        }
+
+        /* ===== Alle runden Header-Icons einheitlich =====
+     (Hamburger, Suche-Topbar, Theme, Account, Cart etc.) */
+        #site-header .icon-btn,
+        #site-header #themeSwitchBtn {
+            box-shadow: 0 0 0 var(--icon-ring-w) var(--icon-ring-color) !important;
+            border: 0 !important;
+        }
+
+        /* ===== BAR 1 einklappen (≥1024px) ===== */
+        #site-header [data-topbar] {
+            max-height: 4rem;
+            opacity: 1;
+            overflow: hidden;
+            transition: max-height .2s ease, opacity .2s ease;
+        }
+
+        @media (min-width:1080px) {
+            #primary-menu-toggle {
+                display: none !important;
+            }
+        }
+
+        /* BAR 2 auf < lg komplett “weg” – kein Restabstand */
+        @media (max-width: 1023.98px) {
+            #site-header .bar2-wrapper {
+                display: none !important;
+            }
+        }
+
+        /* ===== Mobile-Search wirklich aus dem Flow nehmen ===== */
+        #mobile-search[hidden] {
+            display: none !important;
+        }
+
+        /* ===== Adminbar Korrektur ===== */
+        body.admin-bar #site-header {
+            top: 32px;
+        }
+
+        @media (max-width:782px) {
+            body.admin-bar #site-header {
+                top: 46px;
+            }
+        }
+
+        .sa-tabs {
+            list-style: none;
+            padding-left: 0
+        }
+
+        /* Eltern-LI ist Trigger */
+        #primary-navigation li.menu-item-has-children {
+            position: relative;
+        }
+
+        /* Submenü standardmäßig zu … */
+        #primary-navigation li.menu-item-has-children>.sub-menu {
+            display: none;
+            top: calc(100% - 1px);
+            /* klebt 1px näher am Tab */
+            margin-top: 0;
+            z-index: 60;
+        }
+
+        #primary-navigation li.menu-item-has-children::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 100%;
+            height: 10px;
+            /* 6–12px sind meist sweet spot */
+            pointer-events: none;
+            /* blockiert keine Klicks aufs Menü */
+        }
+
+        .sa-tabs .current-menu-item>a,
+        .sa-tabs .current_page_item>a,
+        .sa-tabs .current-menu-ancestor>a,
+        .sa-tabs a.is-active {
+            color: rgb(var(--c-primary));
+            border-color: rgb(var(--c-primary));
+        }
+        #site-header [data-bar2],
+        #primary-navigation{ overflow: visible !important; }
+        /* Nichts abschneiden */
+        #site-header [data-bar2],
+        #primary-navigation,
+        #primary-navigation>ul {
+            /* deine .sa-tabs */
+            overflow: visible !important;
+        }
+
+        /* Optional: schlanker Scrollbar */
+        #primary-navigation>ul.sa-tabs::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        #primary-navigation>ul.sa-tabs {
+            scrollbar-width: thin;
+        }
+
+        #primary-navigation>ul.sa-tabs {
+            overflow-x: auto;
+            overflow-y: visible;
+        }
+
+        /* Desktop/Keyboard öffnen */
+        #primary-navigation li.menu-item-has-children:hover>.sub-menu,
+        #primary-navigation li.menu-item-has-children:focus-within>.sub-menu,
+        #primary-navigation li.menu-item-has-children[data-open="true"]>.sub-menu {
+            display: block !important;
+            /* <- gewinnt gegen .hidden */
+        }
+
+        /* Submenu nimmt die Theme-Farben (hell/dunkel) */
+        #primary-navigation .sub-menu {
+            background-color: rgb(var(--c-surface)) !important;
+            color: rgb(var(--c-on-surface));
+            border-color: rgb(var(--c-on-surface) / .16) !important;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, .12), 0 2px 8px rgba(0, 0, 0, .08);
+        }
+
+        /* Submenu-Links: weicher Unterstrich wie oben, aber nur Text/Icon färben */
+        #primary-navigation .sub-menu a {
+            position: relative;
+            text-decoration: none;
+        }
+
+        #primary-navigation .sub-menu a,
+        #primary-navigation .sub-menu a:hover,
+        #primary-navigation .sub-menu a:focus-visible {
+            background: transparent !important;
+        }
+
+        /* Icons im Submenu folgen der Textfarbe (bereits .text-current am Wrapper vorhanden) */
+        #primary-navigation .sub-menu a .me-2 {
+            color: currentColor;
+        }
+
+        /* 1) Submenu-Links: gut lesbar im Grundzustand */
+        #primary-navigation .sub-menu {
+            /* Container bleibt theme-abhängig */
+            background-color: rgb(var(--c-surface)) !important;
+            color: rgb(var(--c-on-surface));
+            border-color: rgb(var(--c-on-surface) / .16) !important;
+        }
+
+        #primary-navigation .sub-menu a {
+            color: rgb(var(--c-on-surface)) !important;
+            /* Textfarbe fix */
+            background: transparent !important;
+            text-decoration: none;
+            opacity: 1;
+            /* falls irgendwo Opacity kam */
+        }
+
+        /* 2) Hover/Active: nur Text/Icon grün – kein Hintergrund */
+        #primary-navigation .sub-menu a:hover,
+        #primary-navigation .sub-menu a:focus-visible,
+        #primary-navigation .sub-menu a[aria-current="page"] {
+            color: rgb(var(--c-primary)) !important;
+        }
+
+        /* 3) Unterstriche im Submenu komplett AUS */
+        #primary-navigation .sub-menu a::after {
+            content: none !important;
+        }
+
+        /* 4) Icons im Submenu nicht abgegraut */
+        #primary-navigation .sub-menu a .me-2 {
+            opacity: .9;
+            color: currentColor;
+        }
+
+        #primary-navigation .sub-menu a:hover .me-2,
+        #primary-navigation .sub-menu a:focus-visible .me-2 {
+            opacity: 1;
+        }
+
+        @media (max-width:1079.98px) {
+            #primary-navigation {
+                display: none !important;
+            }
+        }
+
+        #primary-navigation-mobile[hidden] {
+            display: none !important;
+            height: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        /* py-3 px-2.5 */
+
+        /* Falls irgendwo noch "me-2" hängt: Icon-Margin etwas kleiner erzwingen */
+        #primary-navigation .sa-tabs>li>a .me-2 {
+            margin-inline-end: .375rem;
+        }
+
+        /* BAR-1 einklappen + Lücke killen (≥ lg) 
+        @media (min-width:1080px) {
+            #site-header.is-scrolled [data-topbar] {
+                max-height: 0;
+                opacity: 0;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+                border-bottom-width: 0 !important;
+            }
+
+            #site-header.is-scrolled [data-bar2] {
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+                margin-top: 0 !important;
+                border-top-width: 0 !important;
+              
+            }
+        } */
+
+        /* zeigt das X, wenn geöffnet */
+        #primary-menu-toggle[aria-expanded="true"] [data-ico="close"] {
+            display: inline;
+        }
+
+        #primary-menu-toggle[aria-expanded="true"] svg:not([data-ico="close"]) {
+            display: none;
+        }
+
+        /* Mobile-Navi rechts/links Luft geben */
+        #primary-navigation-mobile {
+            padding-left: .75rem;
+            padding-right: .75rem;
+        }
+
+        /* Links im mobilen Menü etwas mehr Innenabstand */
+        #primary-navigation-mobile .menu>li>a {
+            padding: .75rem .75rem;
+            border: 0 !important;
+            position: relative;
+        }
+
+        /* SVGs sicher nicht clippen */
+        #primary-navigation-mobile svg {
+            display: block;
+            overflow: visible;
+        }
+
+        /* Mobile-Suche schmaler + zentriert */
+        @media (max-width:1079.98px) {
+            #site-header #mobile-search {
+                padding-inline: .75rem;
+                /* kleiner Rand links/rechts */
+            }
+
+            #site-header #mobile-search .sa-search--mobile {
+                width: 100%;
+                max-width: clamp(18rem, 92vw, 32rem);
+                /* ~288–512px, je nach Breite */
+                margin-inline: auto;
+                /* zentrieren */
+            }
+        }
+
+        /* Mobile: Submenüs immer sichtbar & als Liste unter dem Parent zeigen */
+        @media (max-width:1079.98px) {
+
+            /* Ganz wichtig: Dropdown-Styles vom Desktop neutralisieren */
+            #primary-navigation-mobile .sub-menu {
+                display: block !important;
+                position: static !important;
+                inset: auto !important;
+                transform: none !important;
+                min-width: 0 !important;
+
+                margin: .25rem 0 0 .75rem;
+                /* Einzug unter dem Parent */
+                padding: .25rem 0 0 .5rem;
+                border: 0 !important;
+                box-shadow: none !important;
+                background: transparent !important;
+            }
+
+            /* Eltern-Link optisch als Abschnittsüberschrift */
+            #primary-navigation-mobile li.menu-item-has-children>a {
+                font-weight: 600;
+            }
+
+            #primary-navigation-mobile .sub-menu a {
+                border: 0 !important;
+            }
+
+            #primary-navigation-mobile .sub-menu a::after {
+                content: none !important;
+            }
+
+            #primary-navigation-mobile .menu a::after {
+                content: none !important;
+            }
+
+            /* Submenü-Links kompakt & ohne Unterstrich/Border */
+            #primary-navigation-mobile .sub-menu a {
+                padding: .5rem 0;
+                text-decoration: none !important;
+                border: 0 !important;
+            }
+
+            /* Falls irgendwo Overlays/Clipping reinfunken */
+            #primary-navigation-mobile {
+                overflow: visible !important;
+            }
+        }
+
+        /* Mobile-Menü: Subitems im hellen Theme besser lesbar */
+        @media (max-width:1079.98px) {
+
+            /* Elternpunkte (Shop, Sprechstunde) klar sichtbar */
+            #primary-navigation-mobile li.menu-item-has-children>a {
+                color: rgb(var(--c-on-surface)) !important;
+                opacity: 1 !important;
+            }
+
+            /* Alle Sub-Links: richtige Textfarbe, keine künstliche Transparenz */
+            #primary-navigation-mobile .sub-menu a {
+                color: rgb(var(--c-on-surface)) !important;
+                opacity: 1 !important;
+                font-size: 0.975rem;
+                line-height: 1.6;
+                text-decoration: none !important;
+                background: transparent !important;
+            }
+
+            /* Hover/Active nur Text/Icon grün */
+            #primary-navigation-mobile .sub-menu a:hover,
+            #primary-navigation-mobile .sub-menu a:focus-visible,
+            #primary-navigation-mobile .sub-menu a[aria-current="page"] {
+                color: rgb(var(--c-primary)) !important;
+            }
+        }
+
+        /* Top-Tabs, Submenüs, Mobile-Menü → der <a> selber wird Flex-Container */
+        #site-header #primary-navigation .sa-tabs>li>a,
+        #site-header #primary-navigation .sub-menu a,
+        #site-header #primary-navigation-mobile .menu a {
+            display: inline-flex !important;
+            align-items: center !important;
+            line-height: 1.2 !important;
+            /* etwas kompaktere Zeilenhöhe */
+        }
+
+        /* Sicherheitsnetz: falls woanders mal flex-col/block reinkommt */
+        #site-header nav .menu a[class*="flex-col"] {
+            flex-direction: row !important;
+        }
+
+        /* Nav-Links als Inline-Flex + vertikal zentriert */
+        #site-header nav#primary-navigation .menu a,
+        #site-header nav#primary-navigation-mobile .menu a {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: .5rem;
+            line-height: 1.25 !important;
+            vertical-align: middle !important;
+            white-space: nowrap;
+        }
+
+        #site-header nav .menu a>.sa-ico {
+            display: inline-grid !important;
+            place-items: center !important;
+            line-height: 1 !important;
+            flex: 0 0 auto;
+        }
+
+        /* Sicherheitsnetz: falls woanders mal flex-col/block reinkommt */
+        #site-header nav .menu a[class*="flex-col"] {
+            flex-direction: row !important;
+        }
+
+        /* Beide Bereiche bekommen sauberen Stacking-Kontext */
+        #site-header .bar2-wrapper,
+        #site-header [data-bar2] {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Submenüs bleiben ganz oben (hast du schon, hier der Vollständigkeit halber) */
+        #site-header #primary-navigation .sub-menu {
+            position: absolute;
+            z-index: 60;
+        }
+
+        /* Icon-Wrapper zentriert das SVG exakt */
+        #site-header nav .menu a>.sa-ico {
+            display: inline-grid !important;
+            place-items: center !important;
+            line-height: 1 !important;
+        }
+
+        /* --- NAV: Icon sauber und klein (für Desktop + Mobile) --- */
+        #site-header nav .menu a>.sa-ico {
+            display: inline-grid !important;
+            place-items: center !important;
+            width: 1.125rem;
+            /* ≈ 18px – gern 1rem oder 1.25rem testen */
+            height: 1.125rem;
+            line-height: 1 !important;
+            flex: 0 0 auto;
+        }
+
+        /* Desktop: weniger Vertikal-Padding, damit die Zeile nicht so hoch wirkt */
+        @media (min-width:1080px) {
+            #primary-navigation .menu>li>a {
+                padding: .5rem .5rem !important;
+                /* statt py-3 */
+            }
+        }
+
+        /* 2) Link bleibt inline-flex */
+        #site-header nav .menu a {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: .5rem;
+            line-height: 1.25 !important;
+            white-space: nowrap;
+        }
+
+        /* 3) Icon-Wrapper: Größe + Nudge (WRAPPER schieben, nicht das SVG) */
+        #site-header nav .menu a>.sa-ico {
+            display: inline-grid !important;
+            place-items: center !important;
+            width: 1.1em;
+            /* ≈ 17–18px bei 16px Font */
+            height: 1.1em;
+            line-height: 1 !important;
+            flex: 0 0 auto;
+            transform: translateY(var(--ico-nudge)) !important;
+            /* <- wirksam */
+        }
+
+        /* 4) SVG füllt nur den Wrapper, keine weitere Transform hier */
+        #site-header nav .menu a>.sa-ico>svg {
+            display: block !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* === Tabs: zentrierter Glow, schnelle Ausblendung, Dicke variabel === */
+/* === Tabs: gleichmäßiger Fade (links→rechts) === */
+#site-header {
+  --tab-line-h: 2px;     /* Strichdicke */
+  --tab-fade: 5%;       /* wie breit die transparenten Enden sind */
+}
+
+.navstyle-tabs #site-header .sa-tabs>li>a {
+  position: relative;
+  border-bottom-width: 0 !important;
+}
+
+.navstyle-tabs #site-header .sa-tabs>li>a::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:-2px;
+  height:2px;
+  background: rgb(var(--c-primary)) !important;
+  opacity:0; transition: opacity .2s ease;
+  -webkit-mask:none !important; mask:none !important;
+  background-image:none !important;
+}
+
+.navstyle-tabs #site-header .sa-tabs>li>a:hover::after{ opacity:.6; }
+.navstyle-tabs #site-header .sa-tabs>li>a[aria-current="page"]::after{ opacity:1; }
+@layer utilities {
+  .container { max-width: 110rem; } /* dein Layoutmaß */
+}
+
+/* Card hover in dark etwas weicher */
+html.dark .shadow-sm { box-shadow: 0 1px 2px rgba(0,0,0,.30); }
+html.dark .hover\:shadow-md:hover { box-shadow: 0 6px 18px rgba(0,0,0,.45); }
+/* angenehme Lesetypo für Single */
+.sa-prose {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: rgb(var(--c-on-surface));
+}
+.sa-prose :is(h2,h3,h4){
+  color: rgb(var(--c-on-surface));
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 1.5rem 0 .75rem;
+}
+.sa-prose h2{ font-size: clamp(1.5rem,1.1rem + 1vw,1.875rem); }
+.sa-prose h3{ font-size: clamp(1.25rem,1rem + .6vw,1.5rem); }
+.sa-prose p{ margin: 1rem 0; }
+.sa-prose a{
+  color: rgb(var(--c-primary));
+  text-decoration: none;           /* keine Unterlinie */
+}
+.sa-prose a:hover{ opacity: .9; }
+.sa-prose ul{ list-style: disc; padding-left: 1.25rem; margin: .75rem 0 .75rem 0; }
+.sa-prose ol{ list-style: decimal; padding-left: 1.25rem; margin: .75rem 0 .75rem 0; }
+.sa-prose blockquote{
+  margin: 1.25rem 0; padding: .75rem 1rem;
+  border-left: 3px solid rgb(var(--c-primary));
+  background: rgb(var(--c-on-surface) / .03);
+  border-radius: .5rem;
+}
+.sa-prose img{ border-radius: 1rem; }
+/* ===== Blog/Related Cards – Links ohne Underline ===== */
+.related-posts a {
+  text-decoration: none !important;
+}
+
+/* Titel */
+.related-posts h3 a {
+  text-decoration: none !important;
+  color: rgb(var(--c-on-surface));
+}
+.related-posts h3 a:hover {
+  color: rgb(var(--c-primary));
+}
+
+/* Excerpt-Links (falls welche vorkommen) */
+.related-posts p a {
+  text-decoration: none !important;
+  color: inherit;
+}
+.related-posts p a:hover {
+  color: rgb(var(--c-primary));
+}
+
+/* Datum */
+.related-posts time {
+  text-decoration: none !important;
+}
+/* Blog-/Category-Listing: Links ohne Unterstrich */
+.sa-posts a,
+.sa-related a {                    /* auch für "Verwandte Beiträge" */
+  text-decoration: none !important;
+}
+.sa-posts a:hover,
+.sa-related a:hover {
+  text-decoration: none !important;
+  color: rgb(var(--c-primary));
+}
+/* Cap/Body der Karte: im hellen Theme hell, im dunklen Theme dunkel */
+.sa-post-card__cap{
+  background: rgb(var(--c-surface));
+  color: rgb(var(--c-on-surface));
+}
+html.dark .sa-post-card__cap{
+  background: rgb(24 24 27);           /* ≈ dark surface */
+  color: rgb(244 244 245);
+}
+/* Karte selbst leicht vom Hintergrund abheben */
+.sa-post-card{
+  background: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-on-surface) / .08);
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+}
+html.dark .sa-post-card{
+  border-color: rgb(63 63 70);
+  box-shadow: 0 2px 8px rgba(0,0,0,.25);
+}
+/* Blog Cards – global underline aus */
+.post-card a { text-decoration: none !important; }
+
+/* Titel: normal in Textfarbe, bei Hover/Fokus der Karte -> Primär */
+.post-card .post-title a {
+  color: rgb(var(--c-on-surface));
+  transition: color .15s ease;
+}
+
+/* Hover auf der Karte ODER Fokus innerhalb der Karte */
+.post-card:is(:hover, :focus-within) .post-title a {
+  color: rgb(var(--c-primary));
+}
+
+/* Meta-Links dezenter, ohne underline */
+.post-card .meta a {
+  color: rgb(var(--c-on-surface) / .70);
+  text-decoration: none !important;
+}
+.post-card .meta a:hover,
+.post-card .meta a:focus-visible {
+  color: rgb(var(--c-primary));
+}
+
+/* Light/Dark: Karte & Border identisch wie Service-Karten */
+.post-card {
+  background-color: rgb(var(--c-surface));
+  border-color: rgb(var(--c-border));
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+html.dark .post-card {
+  box-shadow: 0 1.5px 3px rgba(0,0,0,.28);
+}
+/* ===== WooCommerce: Grid & Karten ===================================== */
+/* Kartenbild – Verhältnis & Füllung */
+:root{
+  --prod-min: 200px;        
+  --prod-gap: 1.25rem;
+  --prod-ratio: 4 / 5;       /* oder 4 / 5 */
+}
+
+.woocommerce ul.products{
+  display:grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(var(--prod-min), 1fr));
+  gap: var(--prod-gap);
+  margin:0 !important;
+  padding:0 !important;
+}
+.woocommerce ul.products li.product a img{
+  display:block;
+  width:100%;
+  aspect-ratio: var(--prod-ratio);
+  object-fit: cover;         /* oder: contain */
+  background:#fff;           /* hübscher Rand bei contain */
+  /* padding: .5rem; */      /* nur bei contain sinnvoll */
+}
+/* Karte */
+.woocommerce ul.products li.product{
+  float:none !important; width:auto !important; margin:0 !important; clear:none !important;
+  display:flex; flex-direction:column; overflow:hidden;
+  border-radius: 1rem;
+  border:1px solid rgb(var(--c-border));
+  background: rgb(var(--c-surface));
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+html.dark .woocommerce ul.products li.product{
+  border-color: rgb(63 63 70);
+  background: rgb(24 24 27);
+}
+
+/* Inhalt */
+.woocommerce ul.products li.product .woocommerce-loop-product__title{
+  margin: .75rem .9rem 0;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.woocommerce ul.products li.product .price{
+  margin: .25rem .9rem 0;
+  font-size: 1rem;      /* kleiner/größer = kompakter/luftiger */
+}
+.woocommerce ul.products li.product .button{
+  margin: .75rem .9rem .9rem;
+  margin-top:auto;      /* Button immer unten */
+  padding: .5rem 1rem;
+  border-radius: 9999px;
+}
+
+.woocommerce ul.products{ display:grid !important; gap:1.25rem; }
+.woocommerce ul.products{ grid-template-columns: repeat(1,minmax(0,1fr)); }
+@media (min-width:640px){ .woocommerce ul.products{ grid-template-columns: repeat(2,1fr); } }
+@media (min-width:1024px){ .woocommerce ul.products{ grid-template-columns: repeat(3,1fr); } }
+@media (min-width:1280px){ .woocommerce ul.products{ grid-template-columns: repeat(4,1fr); } }
+
+/* Unterstreichung im Shop generell aus */
+.woocommerce .products a { text-decoration: none !important; }
+
+/* Produkt-Grid: responsive Spalten */
+.woocommerce ul.products {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(var(--prod-min, 240px), 1fr)) !important;
+  gap: var(--prod-gap, 1.25rem) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.woocommerce ul.products.columns-1 li.product,
+.woocommerce ul.products.columns-2 li.product,
+.woocommerce ul.products.columns-3 li.product,
+.woocommerce ul.products.columns-4 li.product,
+.woocommerce ul.products.columns-5 li.product {
+  width: auto !important;
+}
+@media (min-width: 640px)  { .woocommerce ul.products { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (min-width: 1024px) { .woocommerce ul.products { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media (min-width: 1280px) { .woocommerce ul.products { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+
+/* Woo-Defaults neutralisieren (sonst stören Floats/Abstände) */
+.woocommerce ul.products li.product {
+  float: none !important;
+  width: auto !important;
+  margin: 0 !important;
+  clear: none !important;
+
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;                                 /* ≈ rounded-2xl */
+  border: 1px solid rgb(var(--c-border));              /* Token */
+  background: rgb(var(--c-surface));                   /* Token -> Dark ok */
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+  overflow: hidden;
+}
+.woocommerce ul.products::before,
+.woocommerce ul.products::after{
+  content: none !important;
+  display: none !important;
+}
+.woocommerce ul.products{
+  list-style: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  grid-auto-flow: row dense; /* füllt evtl. Lücken auf */
+}
+/* Produktbild – immer quadratisch & randlos */
+.woocommerce ul.products li.product a img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;                                    /* cover = schön gefüllt */
+  height: auto;
+  /* kein rounded hier nötig – Karte hat already overflow:hidden */
+}
+
+/* Titel + Hoverfarbe */
+.woocommerce ul.products li.product .woocommerce-loop-product__title {
+  margin: .75rem .9rem 0 .9rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.woocommerce ul.products li.product .woocommerce-loop-product__title a {
+  color: rgb(var(--c-on-surface));
+}
+.woocommerce ul.products li.product:is(:hover,:focus-within) .woocommerce-loop-product__title a {
+  color: rgb(var(--c-primary));
+}
+
+/* Preis: lesbar, Sale del dezenter */
+.woocommerce ul.products li.product .price {
+  font-size: 1rem;            /* text-base */
+  font-weight: 500;           /* font-medium */
+  margin: .5rem .9rem 0 .9rem;
+}
+.price ins { color: inherit; text-decoration: none; }
+.price del { opacity: .6; }
+
+/* CTA-Button an Kartenende pinnen */
+.woocommerce ul.products li.product .button {
+  margin: .75rem .9rem .9rem .9rem;
+  margin-top: auto;                                      /* drückt Button nach unten */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem 1rem;
+  border-radius: 9999px;
+  background-color: rgb(var(--c-primary));
+  color: rgb(var(--c-on-primary));
+  transition: opacity .15s ease;
+}
+.woocommerce ul.products li.product .button:hover { opacity: .9; }
+
+/* Parent ist overflow:hidden → Badge leicht nach innen setzen */
+.woocommerce ul.products li.product a:first-child{ /* Bild-Link */
+  position: relative;           /* Referenz für das Badge */
+}
+
+/* Sale-Badge: oben links, leicht eingerückt */
+.woocommerce span.onsale,
+.sa-badge-sale{
+  display:grid !important;          /* nicht inline-grid */
+  align-items:center !important;
+  justify-items:center !important;
+  height:36px;
+  min-inline-size:48px;             /* min-width, bidi-sicher */
+  padding-inline:.6rem;
+  border-radius:9999px;
+  font:700 14px/1 inherit;
+  white-space:nowrap;
+  text-align:center;                /* Fallback */
+}
+
+/* optional: auf sehr kleinen Screens minimal kleiner */
+@media (max-width: 480px){
+  .woocommerce span.onsale{
+    top:.45rem; left:.45rem;
+    font-size:.7rem; padding:.2rem .45rem;
+  }
+}
+
+/* Links in der Filter-Sidebar clean */
+#shop-filters a { text-decoration: none; }
+#shop-filters a:hover { color: rgb(var(--c-primary)); }
+/* NAV Pills – Dark-Mode: Text dunkel auf hellen Pills */
+html.dark .navstyle-pills #site-header .sa-tabs > li > a{
+  background: rgba(255,255,255,.98);       /* darf gern .95–.98 sein */
+  color: rgb(17 24 39) !important;         /* ≈ zinc-900, gut lesbar */
+  border-color: transparent;
+}
+
+html.dark #site-header .sa-tabs a .sa-ico{ color: currentColor; }
+
+/* Hover/Active im Dark-Mode unverändert invertiert (grün/weiß) */
+html.dark .navstyle-pills #site-header .sa-tabs > li > a:hover,
+html.dark .navstyle-pills #site-header .sa-tabs > li > a:focus-visible,
+html.dark .navstyle-pills #site-header .sa-tabs > li > a[aria-current="page"]{
+  background: rgb(var(--c-primary));
+  color: rgb(var(--c-on-primary));
+  border-color: rgb(var(--c-primary));
+}
+.breadcrumbs{
+  display:flex; flex-wrap:wrap; gap:.5rem; align-items:center;
+  font-size:.925rem; color:rgb(113 113 122); /* zinc-500 */
+  margin-bottom: 1rem;
+}
+.breadcrumbs a{
+  color:inherit; text-decoration:none;
+}
+.breadcrumbs a:hover{ color: rgb(var(--c-primary)); }
+.breadcrumbs .sep{ opacity:.5; }
+/* Seitenleiste Card-Style */
+.shop-sidebar{
+  border:1px solid rgb(var(--c-border));
+  border-radius: .75rem;
+  padding: .75rem;
+  background: rgb(var(--c-surface));
+}
+.shop-sidebar h3{ font-weight:600; font-size:.95rem; margin:.5rem 0 .25rem; }
+.shop-sidebar label, .shop-sidebar a{ text-decoration:none; }
+
+/* Checkboxen kompakt */
+.shop-sidebar .wc-layered-nav-term,
+.shop-sidebar .product-categories li{
+  display:flex; align-items:center; gap:.5rem;
+  padding:.25rem 0;
+}
+/* Listenkarten */
+.woocommerce ul.products li.product .button{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:.5rem;
+  padding:.625rem .875rem; border-radius:9999px;
+  background: rgb(var(--c-primary)); color: rgb(var(--c-on-primary));
+}
+.woocommerce ul.products li.product .button .sr-only{
+  position:absolute; width:1px; height:1px; overflow:hidden;
+  clip:rect(0,0,0,0);
+}
+/* Icon via SVG (Beispiel Einkaufswagen) */
+.woocommerce ul.products li.product .button::before{
+  content:"";
+  width:1.1rem; height:1.1rem;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='black' viewBox='0 0 24 24'><path d='M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.16 14h9.45c.75 0 1.41-.41 1.75-1.03L22 7H6.21l-.94-2H2v2h2l3.6 7.59-.95 1.72C6.23 16.37 6 17.17 6 18c0 .55.45 1 1 1h12v-2H7.42c.14-.25.3-.48.38-.76L7.16 14z'/></svg>") center/contain no-repeat;
+  background: currentColor;
+}
+/* wenn du Text ganz raus willst, nur Icon: */
+.woocommerce ul.products li.product .button{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:.625rem; border-radius:9999px;
+  background: rgb(var(--c-primary)); color: rgb(var(--c-on-primary));
+}
+.woocommerce ul.products li.product .button span { display:none; }
+.woocommerce-ordering{
+  position:relative; display:inline-flex; align-items:center; gap:.5rem;
+  border:1px solid rgb(var(--c-border)); border-radius:.75rem; padding:.375rem .5rem;
+  background: rgb(var(--c-surface));
+}
+.woocommerce-ordering .orderby{
+  appearance:none; -webkit-appearance:none; -moz-appearance:none;
+  background:transparent; border:0; outline:0;
+  padding-right: 1.25rem; cursor:pointer;
+}
+.woocommerce-ordering::after{
+  content:""; width:.65rem; height:.65rem; margin-left:-1rem;
+  mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox=\"0 0 20 20\"><path d=\"M5.25 7.5 10 12.25 14.75 7.5\" stroke=\"black\" stroke-width=\"1.5\" fill=\"none\" stroke-linecap=\"round\"/></svg>") center/contain no-repeat;
+  background: currentColor; opacity:.65; pointer-events:none;
+}
+/* Generell etwas Luft unter der Top-Bar */
+body { scroll-padding-top: calc(var(--header-h) + 12px); }
+#site-header + * { margin-top: 0 !important; }
+/* runder Icon-Button oben rechts im Thumbnail */
+.atc-fab{
+  position:absolute; right:.6rem; top:.6rem;
+  display:inline-flex; align-items:center; justify-content:center;
+  width:2.25rem; height:2.25rem; border-radius:9999px;
+  background: rgb(var(--c-primary)); color: rgb(var(--c-on-primary));
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+  text-decoration:none; line-height:1;
+  transition: transform .12s ease, opacity .12s ease;
+}
+.atc-fab:hover{ opacity:.9; transform: translateY(-1px); }
+html.dark .atc-fab{ background: rgb(var(--c-primary)); color: rgb(var(--c-on-primary)); }
+/* SALE-Badge */
+.sa-badge-sale{
+  display: inline-grid;
+  place-items: center;
+  gap: .35rem;
+  height: 36px;                   /* gleiche Maße wie oben */
+  min-width: 48px;
+  padding: 0 .6rem;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.sa-badge-sale svg{ display:none; }
+.sa-badge-sale__txt{ margin:0; justify-self:center; }
+.cart-count-badge:is(.is-empty, :empty) { display: none; }
+/* Cart-Badge: kompakt, verschiebt kein Layout */
+.cart-count-badge{
+  position:absolute;
+  top:-6px;
+  right:-6px;
+  display:grid;
+  place-items:center;
+  height: 18px;
+  min-width: 18px;
+  padding: 0 .25rem;
+  border-radius:9999px;
+  font-size:11px;
+  line-height:1;
+  background: rgb(var(--c-primary));
+  color:#fff;
+  /* sicherheitshalber… */
+  pointer-events:none;
+}
+#site-header .icon-btn,
+#site-header .cart-contents{
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;   /* kein Schrumpfen */
+}
+
+#site-header .cart-contents svg{
+  width: 24px;
+  height: 24px;
+}
+
+/* nicht anzeigen, wenn leer oder explizit als empty markiert */
+.cart-count-badge:is(:empty, .is-empty){ display:none; }
+
+html.dark .sa-badge-sale{
+  background: rgb(var(--c-primary));
+  color: rgb(var(--c-on-primary));
+}
+/* unauffälliger Hilfsklasse für Screenreader */
+.sr-only{
+  position:absolute !important; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+
+/* Icon-only Add-to-cart (unten im Card-Body) */
+.woocommerce ul.products li.product .button.is-icon{
+  display:inline-grid; place-items:center;
+  width:44px; height:44px;
+  border-radius:9999px;
+  background: rgb(var(--c-primary));
+  color: rgb(var(--c-on-primary));
+  box-shadow: 0 4px 10px rgba(0,0,0,.08);
+  transition: transform .12s ease, opacity .12s ease;
+}
+.woocommerce ul.products li.product .button.is-icon:hover{
+  transform: translateY(-1px);
+  opacity: .9;
+}
+.woocommerce ul.products li.product .button.is-icon svg{
+  width:20px; height:20px; display:block;
+}
+
+/* Sale-Badge links oben etwas nach innen */
+.sa-badge-sale{
+  position:absolute; top:.6rem; left:.6rem;
+  display:inline-flex; align-items:center; gap:.35rem;
+  padding:.32rem .6rem; border-radius:9999px;
+  background: rgb(var(--c-primary)); color: rgb(var(--c-on-primary));
+  box-shadow: 0 4px 10px rgba(0,0,0,.08); z-index:10;
+}
+.sa-badge-sale svg{ width:18px; height:18px; display:block; }
+.sa-badge-sale__txt{ font-weight:700; font-size:.75rem; line-height:1; }
+
+/* falls du die Position lieber noch etwas weiter rein haben willst */
+.woocommerce ul.products li.product .sa-badge-sale{ top:.7rem; left:.7rem; }
+
+/* (optional) Dropdown „Standardsortierung“ hübscher */
+.woocommerce-ordering .orderby{
+  appearance:none; background:#fff; border:1px solid rgb(var(--c-border));
+  border-radius: .75rem; padding:.45rem .9rem; font-size:.925rem;
+}
+html.dark .woocommerce-ordering .orderby{ background: rgb(24 24 27); color: rgb(244 244 245); }
+.woocommerce ul.products li.product .button{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:.5rem; border-radius:9999px; padding:.6rem 1rem;
+}
+.woocommerce ul.products li.product .button .sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+/* den zusätzlichen Link unter der Karte verstecken */
+.woocommerce a.added_to_cart {
+  display: none !important;
+}
+/* Link-Kachel fix (kein Schrumpfen, Icon immer mittig) */
+#site-header .cart-link{
+  width:40px; height:40px;
+  display:inline-flex;
+  align-items:center; justify-content:center;
+  flex:0 0 40px;
+}
+
+/* SVG im Cart-Link fixieren */
+#site-header .cart-link svg{
+  width:24px; height:24px; flex:0 0 auto;
+}
+
+/* Badge: klein, überlappt, verschiebt kein Layout */
+#site-header .cart-count-badge{
+  position:absolute;
+  top:-6px; right:-6px;
+  display:grid; place-items:center;
+  height:18px; min-width:18px;
+  padding:0 .25rem;
+  border-radius:9999px;
+  font-size:11px; line-height:1; font-weight:700;
+  background: rgb(var(--c-primary));
+  color:#fff;
+  pointer-events:none;
+}
+
+/* falls jemals leer reinläuft → ausblenden */
+#site-header .cart-count-badge:empty{ display:none; }
+/* Icon sichtbar halten und nicht weiß färben */
+#site-header .icon-btn,
+#site-header .cart-contents { color: inherit; }
+
+/* Größe fixieren */
+#site-header .cart-contents svg { width: 24px; height: 24px; display:block; }
+/* ===== Vollbreite Trennlinie UNTER Bar 2 ===== */
+#site-header .bar2-wrapper {
+  position: relative; /* Referenz für ::after */
+}
+#site-header .bar2-wrapper::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  transform: translateX(-50%);
+  bottom: -1px;                  /* direkt unter der Bar */
+  width: 100vw;                  /* volle Seitenbreite */
+  height: 1px;
+  background: rgb(var(--c-on-surface) / .10);
+  pointer-events: none;
+}
+html.dark #site-header .bar2-wrapper::after{
+  background: rgb(var(--c-on-surface) / .16);
+}
+
+/* ===== Vollbreite Trennlinie VOR dem Copyright-Balken ===== */
+#site-footer .ft-bottom{
+  position:relative;
+  border-top: 0 !important;      /* lokale Border ausschalten */
+}
+#site-footer .ft-bottom::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  transform: translateX(-50%);
+  top: 0;                        /* Linie oben im ft-bottom */
+  width: 100vw;                  /* volle Seitenbreite */
+  height: 1px;
+  background: rgb(var(--c-on-surface) / .10);
+  pointer-events: none;
+}
+html.dark #site-footer .ft-bottom::before{
+  background: rgb(var(--c-on-surface) / .16);
+}
+/* Service-/Feature-Karten wirklich voll weiß – auch im Dark Mode */
+.service-card,
+.sa-card,
+.post-card,               /* falls deine Startseiten-Kacheln diese Klasse nutzen */
+.sa-post-card {
+  background: #fff !important;            /* nicht die Token nehmen */
+  color: #111;                             /* gute Lesbarkeit auf weiß */
+  border-radius: 1rem;
+  overflow: hidden;                        /* weiße Rundung ohne Durchscheinen */
+  border: 1px solid rgb(var(--c-border));
+}
+
+/* Dark-Mode: explizit auch weiß lassen */
+html.dark .service-card,
+html.dark .sa-card,
+html.dark .post-card,
+html.dark .sa-post-card {
+  background: #fff !important;
+  color: rgb(17 24 39); /* ≈ zinc-900 */
+  border-color: rgb(63 63 70);  /* dunklere Border im Dark Mode okay */
+}
+
+/* Card-Medien: keine Mikrolücken */
+.service-card img,
+.sa-card img,
+.post-card img,
+.sa-post-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Falls du eine getrennte Kopf/Body-Struktur hast → ebenfalls weiß */
+.service-card__cap,
+.service-card__body,
+.sa-post-card__cap,
+.sa-post-card__body {
+  background: #fff !important;
+}
+/* Wrapper hat den EINEN Rahmen */
+.woocommerce-ordering{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  border:1px solid rgb(var(--c-border));
+  border-radius:.75rem;
+  padding:.375rem .5rem;
+  background: rgb(var(--c-surface));
+}
+
+/* Select selbst: KEIN eigener Rahmen */
+.woocommerce-ordering .orderby{
+  appearance:none; -webkit-appearance:none; -moz-appearance:none;
+  background:transparent;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  padding-right:1.25rem;  /* Platz für das Pfeilchen */
+  color: inherit;
+}
+
+/* Fokus-Ring auf dem Wrapper statt auf dem Select */
+.woocommerce-ordering:focus-within{
+  box-shadow: 0 0 0 2px rgb(var(--c-primary) / .22);
+  border-color: rgb(var(--c-primary));
+}
+
+/* eigenes Chevron */
+.woocommerce-ordering::after{
+  content:"";
+  width:.65rem; height:.65rem; margin-left:-1rem;
+  mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M5.25 7.5 10 12.25 14.75 7.5' stroke='black' stroke-width='1.5' fill='none' stroke-linecap='round'/></svg>") center/contain no-repeat;
+  background: currentColor;
+  opacity:.65; pointer-events:none;
+}
+
+/* Dark mode */
+html.dark .woocommerce-ordering{
+  background: rgb(24 24 27);
+  border-color: rgb(63 63 70);
+}
+/* ========= Karten-Texte klar lesbar (hell + dunkel) ========= */
+
+/* Service-/Feature-Karten (Startseite) */
+.service-card,
+.sa-card {
+  background:#fff !important;
+  color: rgb(17 24 39) !important;  /* dunkler Text */
+}
+html.dark .service-card,
+html.dark .sa-card {
+  background:#fff !important;
+  color: rgb(17 24 39) !important;
+}
+
+/* Blog/News-Karten */
+.blog-card,
+.post-card,
+.sa-post-card {
+  background:#fff !important;
+  color: rgb(17 24 39) !important;
+}
+.blog-card *,
+.post-card *,
+.sa-post-card * {
+  text-decoration:none;            /* keine zufälligen Unterstriche */
+}
+
+/* Titel, Auszug, Meta explizit einfärben + Opacity zurücksetzen */
+.blog-card h2 a,
+.post-card .post-title a,
+.sa-post-card h3 a {
+  color: rgb(17 24 39) !important;
+}
+.blog-card p,
+.post-card p,
+.sa-post-card p,
+.post-card .meta,
+.sa-post-card .meta {
+  color: rgb(17 24 39 / .85) !important;
+  opacity: 1 !important;          /* evtl. „ausgebleichtes“ zurücksetzen */
+}
+
+/* Karten-Kappen/-Bodies (falls separat) */
+.service-card__cap,
+.service-card__body,
+.sa-post-card__cap,
+.sa-post-card__body {
+  background:#fff !important;
+  color: rgb(17 24 39) !important;
+}
+
+/* Bilder in Karten: Lücken vermeiden */
+.blog-card img,
+.post-card img,
+.sa-post-card img,
+.service-card img { display:block; width:100%; height:auto; }
+/* Bar1 transparent, wenn is-scrolled */
+#site-header.is-scrolled{
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+/* Such-Icon nur im scrolled-State zeigen */
+#site-header #header-search-toggle{ display:none; }
+#site-header.is-scrolled #header-search-toggle{ display:inline-flex; }
+
+/* Tabs = Unterstrich in Primär (bereits vorhanden); Pill-Stil sicher aus */
+body:not(.navstyle-pills) .sa-tabs a{ border-bottom-width:2px; border-color:transparent; }
+body:not(.navstyle-pills) .sa-tabs a:hover::after,
+body:not(.navstyle-pills) .sa-tabs a[aria-current="page"]::after{ opacity:1; }
+/* Bar 1 wird transparent, wenn gescrollt */
+#site-header.is-scrolled{
+  background: transparent !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+/* Bar 2 ausblenden, sobald gescrollt (nur Desktop) */
+@media (min-width:1080px){
+  #site-header.is-scrolled .bar2-wrapper{
+    display: none !important;          /* <-- entscheidend */
+  }
+}
+
+/* Such-Icon nur im scrolled-State zeigen (Desktop) */
+#site-header #header-search-toggle{ display:none; }
+@media (min-width:1080px){
+  #site-header.is-scrolled #header-search-toggle{ display:inline-flex; }
+}
+/* ===== Scroll-Verhalten korrigieren ===== */
+
+/* Bar 1 sichtbar lassen (nur transparent machen) */
+@media (min-width:1080px){
+  #site-header.is-scrolled [data-topbar]{
+    max-height: 4rem !important;   /* normale Höhe behalten */
+    opacity: 1 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    border-bottom-width: 0 !important;
+  }
+  /* Bar 2 ausblenden bleibt gewünscht */
+  #site-header.is-scrolled .bar2-wrapper{
+    display: none !important;
+  }
+}
+
+/* Header-Hintergrund beim Scrollen transparent – aber Inhalt bleibt */
+#site-header.is-scrolled{
+  background: transparent !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+/* === Scrollzustand: Bar 1 bleibt sichtbar === */
+@media (min-width:1080px){
+  #site-header.is-scrolled{
+    background-color: rgba(var(--c-surface), 0.92) !important;
+    backdrop-filter: blur(8px) !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06) !important;
+  }
+  /* Bar 2 bleibt wie gehabt weg */
+  #site-header.is-scrolled .bar2-wrapper{ display:none !important; }
+  #site-header.is-scrolled .icon-btn{color:rgb(var(--c-on-surface))!important;opacity:1!important;}
+}
+/* Mobile-Suchpanel als Overlay direkt unter dem Header */
+#mobile-search{
+  position: fixed;
+  top: calc(var(--header-h) + 8px);
+  left: 0; right: 0;
+  z-index: 70;
+  padding: .75rem 1rem;
+}
+/* Vollbreite Linie unter BAR 1 (Topbar) */
+#site-header [data-topbar]{
+  position: relative;
+}
+#site-header [data-topbar]::after{
+  content:"";
+  position:absolute;
+  left:50%; transform: translateX(-50%);
+  bottom: 0;
+  width: 100vw;
+  height: 1px;
+  background: rgb(var(--c-on-surface) / .10);
+  pointer-events:none;
+}
+html.dark #site-header [data-topbar]::after{
+  background: rgb(var(--c-on-surface) / .16);
+}
+
+/* Vollbreite Linie unter BAR 2 (falls sichtbar) */
+#site-header .bar2-wrapper{
+  position: relative; z-index: 1; /* unter Submenu lassen, siehe Punkt 4 */
+}
+#site-header .bar2-wrapper::after{
+  content:"";
+  position:absolute;
+  left:50%; transform: translateX(-50%);
+  bottom: 0;
+  width: 100vw;
+  height: 1px;
+  background: rgb(var(--c-on-surface) / .10);
+  pointer-events:none;
+}
+html.dark #site-header .bar2-wrapper::after{
+  background: rgb(var(--c-on-surface) / .16);
+}

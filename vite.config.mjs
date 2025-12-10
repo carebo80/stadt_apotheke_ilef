@@ -1,29 +1,20 @@
+// vite.config.mjs
+import tailwind from '@tailwindcss/vite'
+import path from 'path'
 import { defineConfig } from 'vite'
-import tailwindcss from '@tailwindcss/vite'
 
-export default defineConfig(({ command }) => {
-    const isBuild = command === 'build';
-
-    return {
-        base: isBuild ? '/wp-content/themes/tailpress/dist/' : '/',
-        server: {
-            port: 3000,
-            cors: true,
-            origin: 'http://tailpress.test',
-        },
-        build: {
-            manifest: true,
-            outDir: 'dist',
-            rollupOptions: {
-                input: [
-                    'resources/js/app.js',
-                    'resources/css/app.css',
-                    'resources/css/editor-style.css'
-                ],
-            },
-        },
-        plugins: [
-            tailwindcss(),
-        ],
-    }
-});
+export default defineConfig({
+  plugins: [tailwind()],
+  base: '',                   // relative Pfade für WP
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    emptyOutDir: true,
+    manifest: true,           // <-- wichtig!
+    rollupOptions: {
+      input: {
+        app: path.resolve(__dirname, 'assets/js/app.js'),
+      },
+    },
+  },
+})

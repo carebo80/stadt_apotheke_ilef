@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Main template file for displaying posts.
  *
@@ -67,13 +68,20 @@ get_header();
 		<?php endif; ?>
 	<?php endif; ?>
 
-    <?php if (have_posts()): ?>
-        <?php while (have_posts()): the_post(); ?>
-            <?php get_template_part('template-parts/content', is_singular() ? 'single' : ''); ?>
-        <?php endwhile; ?>
+	<?php if (have_posts()): ?>
+		<?php while (have_posts()): the_post(); ?>
+			<?php get_template_part('template-parts/content', is_singular() ? 'single' : ''); ?>
+		<?php endwhile; ?>
 
-        <?php TailPress\Pagination::render(); ?>
-    <?php endif; ?>
+		<div class="mt-8">
+			<?php the_posts_pagination([
+				'mid_size'  => 2,
+				'prev_text' => __('« Zurück', 'stadt_apotheke_ilef'),
+				'next_text' => __('Weiter »', 'stadt_apotheke_ilef'),
+			]); ?>
+		</div>
+
+	<?php endif; ?>
 </div>
 
 <?php
